@@ -1,7 +1,6 @@
 #Developed By Zoni
 ------------------
 
-[![Header](https://raw.githubusercontent.com/ZoniBoy00/<OWNER>/<OWNER>/readme_header.png "Header")](https://some-url.dev/)
---------------------------------------------------------------------------------------------------------------------------
+file:///C:/Users/jonis/OneDrive/Pictures/OS-Linux-green.svg
 
 
