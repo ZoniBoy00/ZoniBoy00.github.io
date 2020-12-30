@@ -14,7 +14,7 @@
 [![Github](https://img.shields.io/github/followers/ZoniBoy00?label=Follow&style=social)](https://github.com/ZoniBoy00)
 ![](https://visitor-badge.laobi.icu/badge?page_id=ZoniBoy00.ZoniBoy00)
 
-#24292e, $bg-gray-dark
+
 
 
 
