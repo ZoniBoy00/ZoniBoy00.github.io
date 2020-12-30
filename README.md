@@ -15,6 +15,4 @@
 ![](https://visitor-badge.laobi.icu/badge?page_id=ZoniBoy00.ZoniBoy00)
 
 
-# Blog posts
-<!-- BLOG-POST-LIST:START -->
-<!-- BLOG-POST-LIST:END -->
+
