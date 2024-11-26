@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My GitHub Projects</title>
+    <link rel="icon" href="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" type="image/png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Hide scrollbars during animation */
+        }
+        h1 {
+            font-size: 36px;
+            margin: 20px;
+            color: #4caf50;
+            text-align: center;
+        }
+        #search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
+        }
+        #search-bar input, #search-bar select {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #1e1e1e;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        #search-bar input::placeholder {
+            color: #666;
+        }
+        #search-bar select {
+            cursor: pointer;
+        }
+        .repo-container {
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 0 10px;
+            max-width: 1200px;
+        }
+        .repo-card {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .repo-card.fork {
+            border-left: 5px solid #03a9f4; /* Highlight forked repositories */
+        }
+        .repo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.9);
+        }
+        .repo-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #4caf50;
+        }
+        .repo-card p {
+            font-size: 14px;
+            color: #ccc;
+            margin: 5px 0;
+        }
+        .repo-card a {
+            color: #03a9f4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .repo-card a:hover {
+            text-decoration: underline;
+        }
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 18, 18, 0.95);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Add space between elements */
+        }
+        .login-box h2 {
+            text-align: center;
+            margin: 0 0 10px;
+            color: #4caf50;
+            font-size: 24px;
+        }
+        .input-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #121212;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+        }
+        .input-group input::placeholder {
+            color: #666;
+        }
+        .submit-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            opacity: 0.7;
+            pointer-events: none; /* Initially disabled */
+        }
+        .submit-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .submit-btn:hover {
+            background: #45a049;
+        }
+        .fadeOut {
+            animation: fadeOut 1s forwards;
+        }
+        @keyframes fadeOut {
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Animation -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Sign in to GitHub</h2>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" />
+            </div>
+            <button class="submit-btn" id="login-btn">Sign In</button>
+        </div>
+    </div>
+
+    <h1>Welcome to My GitHub Projects!</h1>
+    <div id="search-bar">
+        <input type="text" id="search" placeholder="Search repositories...">
+        <select id="sort">
+            <option value="created">Sort by: Latest</option>
+            <option value="stars">Sort by: Stars</option>
+            <option value="forks">Sort by: Forks</option>
+        </select>
+    </div>
+    <div id="repoContainer" class="repo-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const usernameField = document.getElementById("username");
+            const passwordField = document.getElementById("password");
+            const loginButton = document.getElementById("login-btn");
+            const loginScreen = document.getElementById("login-screen");
+            const repoContainer = document.getElementById("repoContainer");
+            const searchInput = document.getElementById("search");
+            const sortSelect = document.getElementById("sort");
+
+            const usernameText = "ZoniBoy00";
+            const passwordText = "********";
+            const apiBaseUrl = `https://api.github.com/users/ZoniBoy00/repos?per_page=100`;
+
+            let repositories = [];
+
+            function typeUsername() {
+                let index = 0;
+                const interval = setInterval(() => {
+                    if (index < usernameText.length) {
+                        usernameField.value += usernameText[index++];
+                    } else {
+                        clearInterval(interval);
+                        typePassword();
+                    }
+                }, 100);
+            }
+
+            function typePassword() {
+                let index = 0;
+                const interval = setInterval(() => {
+                    if (index < passwordText.length) {
+                        passwordField.value += passwordText[index++];
+                    } else {
+                        loginButton.classList.add("active");
+                        clearInterval(interval);
+                    }
+                }, 100);
+            }
+
+            async function fetchRepositories() {
+                try {
+                    const response = await fetch(apiBaseUrl);
+                    const data = await response.json();
+                    repositories = data.filter(repo => !repo.private);
+                    renderRepositories();
+                } catch (error) {
+                    console.error("Failed to fetch repositories:", error);
+                }
+            }
+
+            function renderRepositories() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const sortKey = sortSelect.value;
+
+                let filteredRepos = repositories.filter(repo =>
+                    repo.name.toLowerCase().includes(searchTerm)
+                );
+
+                if (sortKey === "stars") {
+                    filteredRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+                } else if (sortKey === "forks") {
+                    filteredRepos.sort((a, b) => b.forks_count - a.forks_count);
+                } else {
+                    filteredRepos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                }
+
+                repoContainer.innerHTML = filteredRepos.map(repo => `
+                    <div class="repo-card ${repo.fork ? "fork" : ""}">
+                        <h3>${repo.name}</h3>
+                        <p>${repo.description || "No description available."}</p>
+                        <p>🌟 Stars: ${repo.stargazers_count} | 🍴 Forks: ${repo.forks_count}</p>
+                        <p>🗓 Updated: ${new Date(repo.updated_at).toLocaleDateString()}</p>
+                        <a href="${repo.html_url}" target="_blank">View Repository</a>
+                    </div>
+                `).join("");
+            }
+
+            loginButton.addEventListener("click", () => {
+                loginScreen.classList.add("fadeOut");
+                document.body.style.overflow = "auto"; // Re-enable scrolling
+                fetchRepositories();
+            });
+
+            searchInput.addEventListener("input", renderRepositories);
+            sortSelect.addEventListener("change", renderRepositories);
+
+            typeUsername();
+        });
+    </script>
+</body>
+</html>

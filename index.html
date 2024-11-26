@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Seizure</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Favicon -->
+    <link id="favicon" rel="icon" href="images/seal.png" type="image/png">
+</head>
+<body>
+    <header class="warning-bar top-bar">
+        <span>U.S. Law Enforcement Operation</span>
+    </header>
+    <main class="container">
+        <div class="header">
+            <img src="images/seal.png" alt="Government Seal" class="seal">
+            <h1>This Site Has Been Seized</h1>
+        </div>
+        <p class="description">
+            This domain has been seized by the <strong>Federal Bureau of Investigation (FBI)</strong> 
+            in cooperation with the <strong>Central Intelligence Agency (CIA)</strong>, 
+            the <strong>Department of Justice (DOJ)</strong>, and other international law enforcement agencies.
+        </p>
+        <div class="logos">
+            <img src="images/fbi-logo.png" alt="FBI Logo" class="hover-logo">
+            <img src="images/cia-logo.png" alt="CIA Logo" class="hover-logo">
+            <img src="images/doj-logo.png" alt="DOJ Logo" class="hover-logo">
+        </div>
+        <p class="notice">
+            As part of a joint law enforcement operation, this domain is now under the control of U.S. authorities.<br>
+            <span class="warning">Unauthorized use of this domain is strictly prohibited and punishable under federal law (18 U.S.C. § 1030).</span>
+        </p>
+        <footer class="footer">
+            <p>For further information, please contact: <a href="fun.html" target="_blank">info@justice.gov</a></p>
+        </footer>
+    </main>
+    <footer class="warning-bar bottom-bar">
+        <span>Official Notice: This Domain Is Under Government Control</span>
+    </footer>
+
+    <!-- Favicon Animation -->
+    <script>
+        (function () {
+            const faviconElement = document.getElementById('favicon');
+            const icons = ['images/seal.png', 'images/warning.png'];
+            let currentIcon = 0;
+
+            // Toggle favicon every 1 second
+            setInterval(() => {
+                currentIcon = (currentIcon + 1) % icons.length;
+                faviconElement.href = icons[currentIcon];
+            }, 1000);
+        })();
+    </script>
+</body>
+</html>
